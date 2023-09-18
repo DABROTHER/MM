@@ -1,0 +1,17 @@
+import { ReactNode } from 'react'
+
+export type TableColumn = {
+  header: string
+  accessor: string
+  colSpan: number
+}
+
+export type TableProps<T> = {
+  data: T[]
+  columns: TableColumn[]
+  renderCell: (item: T, column: TableColumn) => ReactNode
+  className?: string
+  headerCSS?: string
+  isBorderBottom?: boolean
+  onChangeRange?: (range: number) => void
+}
