@@ -6,7 +6,7 @@ import ExplorePageTemplate from 'design-systems/Templates/Explore'
 import { useExplore } from 'hooks'
 import { ExploreFilters } from 'interfaces'
 import { useBlockchain } from 'hooks/apis/useBlockchain'
-const initialFilter = { categoryId: '', blockchainId: '', trending: '' }
+const initialFilter = { categoryId: '', blockChainId: '', trending: '' }
 
 const ExplorePage: NextPage = () => {
   const [filters, setFilters] = useState<ExploreFilters>(initialFilter)

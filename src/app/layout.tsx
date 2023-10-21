@@ -8,16 +8,25 @@ import { ToastContainer } from 'react-toastify'
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-import Header from 'design-systems/Organisms/Header'
-import Footer from 'design-systems/Organisms/Footer'
 import NoFirstRender from 'design-systems/Atoms/NoFirstRender'
-
+import Footer from 'design-systems/Organisms/Footer'
+import Header from 'design-systems/Organisms/Header'
+import WagmiProvider from 'context/wagmi'
+import { ConnectorProvider } from 'context/connector'
+import { ReactQueryDevtools } from 'react-query/devtools'
 const queryClient = new QueryClient()
 
 function Providers({ children }: PropsWithChildren) {
   return (
     <>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <WagmiProvider>
+        <ConnectorProvider>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            {children}
+          </QueryClientProvider>
+        </ConnectorProvider>
+      </WagmiProvider>
     </>
   )
 }

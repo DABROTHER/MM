@@ -1,10 +1,14 @@
-import { PropsWithChildren, ChangeEventHandler } from 'react'
+import { Modify } from 'interfaces'
+import { ChangeEventHandler } from 'react'
 
 export type FileType = 'image' | 'video' | 'audio'
 
-export interface UploadFileProps extends PropsWithChildren {
-  handleChangeFile?: ChangeEventHandler<HTMLInputElement>
-  type?: FileType
-  isBanner?: true
-  className?: string
-}
+export type UploadFileProps = Modify<
+  React.HTMLProps<HTMLTextAreaElement>,
+  {
+    handleChangeFile?: ChangeEventHandler<HTMLInputElement>
+    type?: FileType
+    isBanner?: true
+    className?: string
+  }
+>

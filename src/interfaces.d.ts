@@ -19,7 +19,7 @@ type WithPaginationRequest = {
 }
 type ExploreFilters = {
   categoryId: string
-  blockchainId?: string
+  blockChainId?: string
   trending?: string | boolean
 }
 type CollectionPriceVolume = {
@@ -45,8 +45,31 @@ type CollectionFilters = {
   maxPrice: string
   traits: { [key: string]: string[] }
   search: string
+  event: string[]
+}
+type profileFinalFilters = {
+  tab: string
+  sortBy: string
+  minPrice: string
+  maxPrice: string
+  traits: { [key: string]: string[] }
+  search: string
+  event: string[]
+  time: string
+  trending: boolean
+  quantity: string
+  blockChainId: string
+}
+type profileFinalDetails = {
+  filter: boolean
+  walletAddress: string
 }
 type CollectionDetails = {
-  _id: string
+  slug: string
   filter: boolean
 }
+type CollectedTabFinal = {
+  walletAddress: string
+}
+
+type WalletTypes = 'METAMASK' | 'COINBASE' | 'WALLET-CONNECTION' | 'PHANTOM'

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const getSearchPopular = async () => {
   try {
-    const response = await axios.get('https://y5u9hx13fi.execute-api.us-west-2.amazonaws.com/dev/collection-popular')
+    const response = await axios.get('https://z7nmqllzr7.execute-api.us-west-2.amazonaws.com/dev/collectionla-popular')
     const data = response.data
     return data
   } catch (error) {

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { useMemo } from 'react'
 
 import { usePaginatedQuery } from './usePaginatedQuery'
@@ -20,10 +20,6 @@ export type ResultingFilter = Filter<CollectionFilters, CollectionDetails>
 
 export const useCollection = (filters: ResultingFilter) => {
   const filter = filterEmptyValue(filters)
-  const queryDetails = {
-    _id: filter._id,
-    filter: filter.filter,
-  }
   const queryCollectionFilter = {
     slug: filter.slug,
     tab: filter.tab,
@@ -32,6 +28,7 @@ export const useCollection = (filters: ResultingFilter) => {
     maxPrice: filter.maxPrice,
     traits: filter.traits,
     search: filter.search,
+    event: filter.event,
   }
 
   const { isLoading: isLoadingPriceVolume, mutateAsync: getPriceVolumeAsync } = useMutation(
@@ -43,24 +40,17 @@ export const useCollection = (filters: ResultingFilter) => {
       CollectionService.getPriceDistribution({ walletAddress, startTime, endTime })
   )
   const { isLoading: isLoadingOwnerDistribution, mutateAsync: getOwnerDistributionAsync } = useMutation(
-    ({ walletAddress }: { walletAddress: string }) => CollectionService.getOwnerDistribution({ walletAddress })
+    ({ walletAddress, startTime, endTime }: CollectionPriceDistributionPayload) =>
+      CollectionService.getOwnerDistribution({ walletAddress, startTime, endTime })
   )
 
   const { isLoading: isLoadingOwnersTop50, mutateAsync: getOwnersTop50Async } = useMutation(
-    ({ walletAddress }: { walletAddress: string }) =>
+    ({ walletAddress, startTime, endTime }: CollectionPriceDistributionPayload) =>
       CollectionService.getDataOwnerTop50({
         walletAddress,
+        startTime,
+        endTime,
       })
-  )
-
-  const { isLoading: isLoadingCollectionDetail, data: collectionDetail } = useQuery(
-    [QUERIES.PUBLIC.GET_COLLECTION_DETAILS],
-    () => CollectionService.getCollectionDetail(queryDetails),
-    {
-      select: res => res.data,
-      enabled: Boolean(queryDetails?._id),
-      refetchOnWindowFocus: false,
-    }
   )
   const query = filterEmptyValue(queryCollectionFilter)
 
@@ -81,7 +71,7 @@ export const useCollection = (filters: ResultingFilter) => {
       }),
     res => res.data.data,
     {
-      enabled: Boolean(queryCollectionFilter?.tab),
+      enabled: Boolean(queryCollectionFilter?.tab && queryCollectionFilter?.slug),
       refetchOnWindowFocus: false,
     },
     { ...query }
@@ -100,8 +90,6 @@ export const useCollection = (filters: ResultingFilter) => {
     isFetchingNextCollection,
     fetchMoreCollection,
     isRefetching,
-    collectionDetail,
-    isLoadingCollectionDetail,
     isLoadingOwnersTop50,
     getOwnersTop50Async,
     isLoadingPriceVolume,

@@ -7,7 +7,7 @@ import { useBlockchain } from 'hooks/apis/useBlockchain'
 import { ExploreFilters } from 'interfaces'
 import { useCateory } from 'hooks/apis/useCateory'
 import { useTrending } from 'hooks/apis/useTrending'
-const initialFilter = { categoryId: '', blockchainId: '', trending: '' }
+const initialFilter = { categoryId: '', blockChainId: '', trending: '' }
 
 const Trending: NextPage = () => {
   const [filters, setFilters] = useState<ExploreFilters>(initialFilter)

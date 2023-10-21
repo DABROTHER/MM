@@ -10,6 +10,8 @@ export interface CollectionCardListProps {
   isFetchingNextCollection: boolean
   fetchMoreCollection: AnyFunction
   isRefetching: boolean
-  selected: number
-  onChangeRange: (range: number) => void
+  selected?: number
+  onChangeRange?: (range: number) => void
+  isProfileFinal?: boolean
+  type?: string
 }

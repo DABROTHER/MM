@@ -18,25 +18,25 @@ const Card: React.FC<CardProps> = ({
   href = '',
   borderSize = 'sm',
   onSelect,
+  scroll = false,
 }) => {
-  const borderRadius = getBorderRadius(variant)
-  const borderRadiusSize = getBorderRadiusSize(borderSize)
+  const borderRadius = getBorderRadius(variant, borderSize)
   const cardDirection = getTransform(direction)
   const type = getExtentionOfImage(src as string) as string
   return (
     <div
       className={`${
         direction != 'z-direction' && cardDirection
-      } relative rounded-sm  ${className}  flex flex-col ${borderRadius} ${borderRadiusSize} opacity-100`}
+      } relative rounded-sm  ${className}  flex flex-col ${borderRadius}  opacity-100`}
       onClick={onSelect}
     >
-      <Link className="flex h-full w-full flex-col" href={href} scroll={false}>
-        <div className={`flex h-full w-full  ${borderRadius} ${borderRadiusSize}`}>
+      <Link className="flex h-full w-full flex-col" draggable={false} href={href} scroll={scroll}>
+        <div className={`flex h-full w-full  ${borderRadius}`}>
           <File
             alt={alt}
-            className={`${borderRadius} ${borderRadiusSize} overflow-hidden`}
+            className={`${borderRadius}  overflow-hidden`}
             src={src}
-            styles={`${fileClassName} h-full w-full ${borderRadius} ${borderRadiusSize} ${
+            styles={`${fileClassName} h-full w-full ${borderRadius}  ${
               direction === 'z-direction' && cardDirection
             } object-cover`}
             type={type}

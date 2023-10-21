@@ -13,8 +13,8 @@ export interface CollectionPageTemplateProps {
   isLoadingCollectionDetail: boolean
   collectionDetail: CollectionDetailsData
   isLoadingOwnersTop50: boolean
-  getOwnersTop50Async: (walletAddress: { walletAddress: string }) => Promise<CollectionDataOwnerTop50Response>
-  getOwnerDistributionAsync: (walletAddress: { walletAddress: string }) => Promise<CollectionDataOwnerResponse>
+  getOwnersTop50Async: (data: CollectionPriceDistributionPayload) => Promise<CollectionDataOwnerTop50Response>
+  getOwnerDistributionAsync: (data: CollectionPriceDistributionPayload) => Promise<CollectionDataOwnerResponse>
   getPriceVolumeAsync: (data: CollectionPriceVolume) => Promise<CollectionVolumePriceResponse>
   isLoadingPriceVolume: boolean
   onSortByPrice: (data: ExploreBlock) => void
@@ -25,4 +25,6 @@ export interface CollectionPageTemplateProps {
   isLoadingPriceDistribution: boolean
   totalCOunt: number
   onSearch: (searchValue: string) => void
+  onClickEvent: (selectedValue: string) => void
+  onChangeCategory: () => void
 }

@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 
 import ModalSingleItem from '../ModalSingleItem'
-
 import { SingleItemAccordionProps } from './interface'
 
 import { IconPlusBlack } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import Accordion from 'design-systems/Atoms/Accordion'
 
-const AccordionSingleItem: React.FC<SingleItemAccordionProps> = ({ label }) => {
+const AccordionSingleItem: React.FC<SingleItemAccordionProps> = ({ label, onSubmitHandler }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-
+ 
   return (
     <>
       <Accordion className="rounded-sm" isOpen={isOpen} label={label} setIsOpen={setIsOpen}>
@@ -38,7 +37,7 @@ const AccordionSingleItem: React.FC<SingleItemAccordionProps> = ({ label }) => {
           </div>
         )}
       </Accordion>
-      <ModalSingleItem open={modalOpen} setIsModalOpen={setModalOpen} label={label} />
+      <ModalSingleItem label={label} open={modalOpen} setIsModalOpen={setModalOpen} onSubmitHandler={onSubmitHandler} />
     </>
   )
 }

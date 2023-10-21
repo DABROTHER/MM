@@ -3,4 +3,5 @@ export interface CollectionInfoProps {
   name: string
   creator: string
   description: string
+  creatingSince?: React.ReactNode
 }

@@ -12,7 +12,10 @@ export const getQueries = (obj: AnyObject): string => {
 export const parseData = (data: string) => {
   return JSON.parse(data)
 }
-
+export const logInfo = (title: string, desc = '', background = '#222', color = '#bada55') => {
+  // eslint-disable-next-line no-console
+  console.log(`%c ${title} - ${desc} `, `background: ${background}; color: ${color}`)
+}
 export const getExtentionOfImage = (url: string) => {
   if (typeof url === 'string') return url.split('.').pop()
   return ''
@@ -121,3 +124,54 @@ export function filterEmptyValue<T extends Record<string, any>>(inputObj: T): T 
 
   return result
 }
+
+export const getLastHourTime = (currentTime: any, hours: number) => {
+  currentTime.setHours(currentTime.getHours() - hours)
+  return currentTime.toISOString()
+}
+export const convertIntoFormData = (object: AnyObject) => {
+  const formData = new FormData()
+  for (const [key, value] of Object.entries(object)) {
+    formData.append(key, value)
+  }
+  return formData
+}
+
+export function generateKeyValueData(
+  level: string,
+  keys: string[],
+  values: string[]
+): Record<string, { key: string; value: string }[]> {
+  return {
+    [level]: keys.map((key, index) => ({ key, value: values[index] })),
+  }
+}
+export function generateFromToData(
+  level: string,
+  keys: string[],
+  toValues: string[],
+  fromValues: string[]
+): Record<string, { key: string; to: string; from: string }[]> {
+  return {
+    [level]: keys.map((key, index) => ({ key, to: toValues[index], from: fromValues[index] })),
+  }
+}
+export const convertDate2UTCTimeStamp = (date: Date) => {
+  const utc: number = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes()
+  )
+  return Math.ceil(utc.valueOf() / 1000)
+}
+
+ export function formatCustomTimeDate(date: Date) {
+   const hours = date.getHours()
+   const minutes = date.getMinutes()
+   const ampm = hours >= 12 ? 'pm' : 'am'
+   const formattedHours = hours % 12 === 0 ? 12 : hours % 12
+   const formattedMinutes = minutes.toString().padStart(2, '0')
+   return `${formattedHours}:${formattedMinutes} ${ampm}`
+ }

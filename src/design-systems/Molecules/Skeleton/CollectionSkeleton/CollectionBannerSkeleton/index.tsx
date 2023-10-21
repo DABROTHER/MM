@@ -21,11 +21,11 @@ const CollectionBannerSkeleton: React.FC<CollectionBannerSkeletonProps> = ({ cla
           }
         />
         <div className="mx-4 flex flex-row justify-between">
-          <div className="absolute bottom-[-80px] h-[88px] w-[88px] rounded-xs smd:h-[112px] smd:w-[112px] lmd:h-[160px] lmd:w-[160px]">
+          <div className="absolute bottom-[-53px] h-[88px] w-[88px] rounded-xs smd:h-[112px] smd:w-[112px] lmd:bottom-[-80px] lmd:h-[160px] lmd:w-[160px]">
             <CardSkeleton className="group flex !h-full  w-full !rounded-sm border border-grayBorder" />
           </div>
         </div>
-        <CollectionIconSkeleton className="mr-4 mt-3 hidden w-[90%] lmd:flex" noOfIcon={3} />
+        <CollectionIconSkeleton className="collection-skeleton mr-4 mt-3 hidden w-[90%] lmd:flex" noOfIcon={3} />
       </div>
     </div>
   )

@@ -1,13 +1,13 @@
 import { StaticImageData } from 'next/image'
 
 export interface ResourcesCardProps {
-  id?: number
-  image: string | StaticImageData
+  id?: number | string
+  image: string
   imageWhite?: string
   name: string
   height?: number
   width?: number
   heightMobile?: number
   widthMobile?: number
-  onClick?: () => void
+  onClick?: React.Dispatch<React.SetStateAction<string>>
 }

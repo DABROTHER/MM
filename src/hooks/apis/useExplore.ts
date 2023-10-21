@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'wagmi'
 
 import { usePaginatedQuery } from './usePaginatedQuery'
 

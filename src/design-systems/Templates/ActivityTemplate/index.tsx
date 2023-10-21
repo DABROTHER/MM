@@ -119,7 +119,7 @@ const ActivityTemplate: React.FC<ActivityPageTemplateProps> = ({
             )}
           </div>
           <div className="commonInput absolute left-0 top-[64px] w-full lmd:left-auto lmd:right-0 lmd:top-0 lmd:w-[50%] lg:w-[67.5%] xl:w-[77.5%]">
-            <CommonInput className="w-full" placeholder="Search by name or trait" />
+            <CommonInput className="w-full" placeholder="Search by name or trait" onChange={() => {}} />
           </div>
         </div>
         <Table

@@ -2,13 +2,8 @@
 /* eslint-disable react/no-children-prop */
 
 import React, { useState } from 'react'
-import Image from 'next/image'
+
 import { ProfileDetailsProps } from './interface'
-import PreviewImage from 'assets/images/RectanglePreview.png'
-import ProfileBanner from 'assets/images/profileBanner.png'
-import { IconTwitter } from 'design-systems/Atoms/Icons'
-import Typography from 'design-systems/Atoms/Typography'
-import CategoryList from 'design-systems/Organisms/List/CategoryList'
 import {
   LaunchpadCss,
   categoryLabel,
@@ -19,6 +14,9 @@ import {
   typoGraphyPara,
 } from './utils'
 
+import { IconTwitter } from 'design-systems/Atoms/Icons'
+import Typography from 'design-systems/Atoms/Typography'
+import CategoryList from 'design-systems/Organisms/List/CategoryList'
 import Input from 'design-systems/Atoms/Input'
 import TextAreaInput from 'design-systems/Atoms/TextAreaInput'
 import Button from 'design-systems/Atoms/Button'
@@ -33,6 +31,7 @@ import { items } from 'design-systems/Atoms/Checkbox/utils'
 import UnitInput from 'design-systems/Atoms/UnitInput'
 import Tab from 'design-systems/Atoms/Tabs'
 import AccordionProfileDetails from 'design-systems/Molecules/AccordionProfileDetails'
+import UploadImage from 'design-systems/Atoms/UploadImage'
 
 const LaunchpadCardSkeltonList = () => {
   return (
@@ -91,25 +90,18 @@ const ProfileDetailsTemplate: React.FC<ProfileDetailsProps> = ({
                 <div className="smd:w-[32%]">
                   <Typography className={`mt-7 ${typoGraphyHeading}`}>Profile picture</Typography>
 
-                  <div className="mt-2 h-[114px] max-h-[162.5px] w-[114px] max-w-[162.5px] rounded-sm border border-solid border-lightGray smd:h-[160px] smd:w-[163px] lmd:h-[163px]">
-                    <Image
-                      alt="profile-image"
-                      className="flex h-full max-h-[163px] w-full rounded-sm object-cover"
-                      height={0}
-                      src={PreviewImage}
-                      width={0}
+                  <div className="mt-2 flex h-[112px] w-[112px] cursor-pointer items-center justify-center rounded-sm border border-solid border-lightGray lmd:h-[160px] lmd:w-[160px]">
+                    <UploadImage
+                      classNameImage="mx-auto w-[112px] h-[112px] lmd:h-[160px] lmd:w-[160px] rounded-sm object-cover"
+                      id="profileImg"
                     />
                   </div>
-
                   <Typography className={`mt-3 smd:mt-7 ${typoGraphyHeading}`}>Profile banner</Typography>
 
-                  <div className="mt-2 h-[82px] max-h-[83px] w-full max-w-[323px] rounded-sm border border-solid border-lightGray sm:w-[322px] smd:h-[82.5px] smd:w-[322.5px]">
-                    <Image
-                      alt="profile-image"
-                      className="flex h-full max-h-[83px] w-full rounded-sm object-cover"
-                      height={0}
-                      src={ProfileBanner}
-                      width={0}
+                  <div className="mt-2 flex h-[82px] max-h-[83px] w-full items-center justify-center rounded-sm border border-solid border-lightGray smd:h-[80px] smd:w-[322px]">
+                    <UploadImage
+                      classNameImage="mx-auto h-[80px] w-[320px] rounded-sm object-cover"
+                      id="profileBannImg"
                     />
                   </div>
                 </div>
@@ -135,12 +127,12 @@ const ProfileDetailsTemplate: React.FC<ProfileDetailsProps> = ({
                 </Button>
               </div>
 
-              <Input className="mt-4 smd:mt-7" placeholder="www.sample.com" label="Your links" />
+              <Input className="mt-4 smd:mt-7" label="Your links" placeholder="www.sample.com" />
 
               <Input
                 className="mt-3"
-                placeholder="0xdfhgserdfh6e9h9ha9ev2bq24cb586b27cb947pbv68e"
                 label="Your wallet address "
+                placeholder="0xdfhgserdfh6e9h9ha9ev2bq24cb586b27cb947pbv68e"
               />
 
               <Button className="mt-10 pl-[14.2px] pr-[14.2px] smd:mt-[30px] smd:pl-[14.3px] smd:pr-[14.3px]">
@@ -166,7 +158,7 @@ const ProfileDetailsTemplate: React.FC<ProfileDetailsProps> = ({
                         // eslint-disable-next-line react/no-children-prop
                         children={
                           <FeaturedInfo
-                            className="!pt-3 md:!pt-[17px]"
+                            className="!pt-3 md:!pt-[14px]"
                             data={trendingCardInfo}
                             id={data.id}
                             name={data.name}
@@ -198,10 +190,10 @@ const ProfileDetailsTemplate: React.FC<ProfileDetailsProps> = ({
               {items.map((data, i) => (
                 <div className="flex flex-col" key={i}>
                   <Checkbox
-                    label={data.label}
-                    className="mt-8 smd:mt-[30px]"
-                    onChange={() => handleChange(data.id)}
                     checked={checkedItems[data.id] || (data.id !== 'item-sold' && data.id !== 'owned-item-updates')}
+                    className="mt-8 smd:mt-[30px]"
+                    label={data.label}
+                    onChange={() => handleChange(data.id)}
                   />
                 </div>
               ))}
@@ -213,11 +205,12 @@ const ProfileDetailsTemplate: React.FC<ProfileDetailsProps> = ({
                 nisl ultricies.
               </Typography>
               <div className="mt-[10px] w-[150px] smd:mt-3">
-                <UnitInput type="number" inputClassName="w-[60%]" />
+                <UnitInput inputClassName="w-[60%]" type="number" />
               </div>
               <Button className={`mt-8 ${typoGraphyHeading}`}>Save changes</Button>
             </div>
           )}
+
           {categoryType === 'Offers' && (
             <div className="mt-[30px] smd:mt-7">
               <Typography className={typoGraphyHeading}>Offer Protection</Typography>

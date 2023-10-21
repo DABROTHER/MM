@@ -5,3 +5,7 @@ export type ProfileItemType = {
   width: number
   height: number
 }
+export type ProfilePropsType = {
+  responsiveProfileIsOpne?: boolean
+  className?: string
+}

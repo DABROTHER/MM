@@ -35,6 +35,7 @@ interface NFTAssetObject {
   royalties?: number
   updateAt?: number
   symbol?: string
+  slug: string
   banner?: string
   nfts: NFTObject[]
   bannerImage: string

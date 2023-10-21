@@ -26,7 +26,7 @@ class CollectionService {
       `${URL}${API_ENDPOINTS.PUBLIC.GET_COLLECTION_VolumePrice}?${getQueries(filters)}`
     )
   }
-  getOwnerDistribution = (filters: { walletAddress: string }) => {
+  getOwnerDistribution = (filters: CollectionPriceDistributionPayload) => {
     const URL = `https://zrkmun91p4.execute-api.us-west-2.amazonaws.com/dev`
     return CoreAPIService.get<CollectionDataOwnerResponse>(
       `${URL}${API_ENDPOINTS.PUBLIC.GET_COLLECTION_OWNER_DISTRIBUTION}?${getQueries(filters)}`
@@ -38,7 +38,7 @@ class CollectionService {
       `${URL}${API_ENDPOINTS.PUBLIC.GET_COLLECTION_PRICE_DISTRIBUTION}?${getQueries(filters)}`
     )
   }
-  getDataOwnerTop50 = (filters: { walletAddress: string }) => {
+  getDataOwnerTop50 = (filters: CollectionPriceDistributionPayload) => {
     const URL = `https://zrkmun91p4.execute-api.us-west-2.amazonaws.com/dev`
     return CoreAPIService.get<CollectionDataOwnerTop50Response>(
       `${URL}${API_ENDPOINTS.PUBLIC.GET_COLLECTION_OWNER_TOP_50}?${getQueries(filters)}`

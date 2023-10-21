@@ -22,7 +22,7 @@ axios.interceptors.request.use(
     if (typeof window !== 'undefined') {
       const accessToken = checkAccessToken()
       if (accessToken) {
-        config.headers.Authorization = accessToken
+        config.headers.Authorization = `Bearer ${accessToken}`
       }
     }
     return config

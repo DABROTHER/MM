@@ -12,11 +12,11 @@ const Profile: React.FC = () => {
   return (
     <ProfileDetailsTemplate
       active={active}
-      setActive={setActive}
-      loading={isLoading}
       categoryType={type}
-      onSetCategory={setType}
+      loading={isLoading}
+      setActive={setActive}
       trendingCardInfo={CardInfo}
+      onSetCategory={setType}
     />
   )
 }

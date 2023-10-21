@@ -1,4 +1,4 @@
-export type ChartType = 'ComboChart' | 'ColumnChart' | 'BarChart' | 'Bar'
+export type ChartType = 'ComboChart' | 'ColumnChart' | 'BarChart' | 'Bar' | 'LineChart' | 'Line'
 export interface ChartsProps {
   className?: string
   data?: any[] | {}
@@ -17,4 +17,5 @@ export interface ChartsProps {
   width?: string
   border?: number
   hAxisPosition?: string
+  lineColor?: string
 }

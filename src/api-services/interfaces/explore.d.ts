@@ -37,6 +37,7 @@ interface ExploreListData {
   category: string
   symbol: string
   img: string
+  likeCount: number
   __v: number
   tags: string
   paymentToken: string

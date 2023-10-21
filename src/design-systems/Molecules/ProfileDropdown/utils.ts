@@ -4,6 +4,8 @@ import profileIcon from 'assets/images/profileIcon.svg'
 import watchlistIcon from 'assets/images/watchlistIcon.svg'
 import myCollectionsIcon from 'assets/images/myCollectionsIcon.svg'
 import knowledgeGalleryIcon from 'assets/images/knowledgeGalleryIcon.svg'
+import dataIcon from 'assets/images/dataIcon.svg'
+import activityIcon from 'assets/images/activity.svg'
 import settingsIcon from 'assets/images/settingsIcon.svg'
 import logOutIcon from 'assets/images/logOutIcon.svg'
 
@@ -45,20 +47,34 @@ export const ProfileItem = [
   },
   {
     id: 6,
+    value: 'Data',
+    img: dataIcon,
+    width: 17,
+    height: 24,
+  },
+  {
+    id: 7,
+    value: 'Activity',
+    img: activityIcon,
+    width: 17,
+    height: 24,
+  },
+  {
+    id: 8,
     value: 'Language',
     img: LanguageIcon,
     width: 23,
     height: 24,
   },
   {
-    id: 7,
+    id: 9,
     value: 'Settings',
     img: settingsIcon,
     width: 24,
     height: 24,
   },
   // {
-  //   id: 8,
+  //   id: 10,
   //   value: 'Log Out',
   //   img: logOutIcon,
   //   width: 21,

@@ -8,6 +8,7 @@ module.exports = {
       'd1gqvtt7oelrdv.cloudfront.net',
       'mordernmuseum.s3.amazonaws.com',
       'mordernmuseum2.s3.us-west-2.amazonaws.com',
+      'elementals-images.azuki.com',
     ],
   },
 }

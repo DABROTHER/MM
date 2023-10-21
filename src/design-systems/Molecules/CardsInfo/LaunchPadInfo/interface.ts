@@ -4,4 +4,6 @@ export interface LaunchPadInfoProps {
   name: string
   isLiked: boolean
   likeCount: string
+  onLike?: () => void
+  isLoadingLike?: boolean
 }
