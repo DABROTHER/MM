@@ -19,11 +19,13 @@ import { launchpadNotification } from 'design-systems/Molecules/Cards/Card/utils
 import Button from 'design-systems/Atoms/Button'
 import { ScrollTrigger } from 'design-systems/Molecules/ScrollTrigger'
 import { PAGE_SIZE } from 'utils'
-
-export const LaunchpadCardSkeltonList = () => {
+interface SkeletonLaunchpadProps {
+  noOfSkeleton?: number
+}
+export const LaunchpadCardSkeltonList: React.FC<SkeletonLaunchpadProps> = ({ noOfSkeleton }) => {
   return (
     <>
-      {Array(PAGE_SIZE)
+      {Array(noOfSkeleton ?? PAGE_SIZE)
         .fill('')
         .map((_: string, i: number) => (
           <CardSkeleton
@@ -78,7 +80,7 @@ const LaunchPageTemplate: React.FC<LaunchpadProps> = ({
                     />
                   }
                   className="group !h-full !w-full"
-                  direction="z-direction"
+                  direction={undefined}
                   fileClassName="!h-full !w-full opacity-100"
                   notification={
                     <div className="justify-between">
@@ -105,7 +107,7 @@ const LaunchPageTemplate: React.FC<LaunchpadProps> = ({
                       fileClassName="!h-full !w-full"
                       key={i}
                       src={img}
-                      variant="all"
+                      variant="top"
                       onClick={() => onChangeBanner(collectionId)}
                     />
                   )

@@ -1,18 +1,25 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 
 import { commBtn, commHead, commSpan } from './utils'
+import { ChooseTypeProps } from './interface'
 
 import Typography from 'design-systems/Atoms/Typography'
 import Button from 'design-systems/Atoms/Button'
 import { IconRightArrowBlack } from 'design-systems/Atoms/Icons'
 
-const ChooseType = () => {
+const ChooseType: React.FC<ChooseTypeProps> = ({ blockchainSlug }) => {
   const [slug, setSlug] = useState<string>('')
 
   const multipleBlockClass = `${commSpan} ${slug === 'multiple' ? 'border border-black' : 'border border-lightGray'}`
-
+  const createPath = useMemo(
+    () =>
+      `/create/${blockchainSlug === 'ethereum' ? '' : `${blockchainSlug}-`}${
+        slug === 'single' ? 'erc-721' : 'erc-1155'
+      }`,
+    [blockchainSlug, slug]
+  )
   return (
     <div className="container mb-[108px] pt-[22px]">
       <div className="mb-[26px] text-left smd:mb-[34px]">
@@ -60,7 +67,7 @@ const ChooseType = () => {
       </div>
       <div className="flex justify-end pt-8">
         {slug ? (
-          <Link href={`/create/stepThree/${slug}`}>
+          <Link href={createPath}>
             <Button
               className="ml-auto gap-[76.1px] bg-cover bg-center px-[15px] py-[10.9px] smd:!gap-3"
               disabled={!slug ? true : false}

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useFormik } from 'formik'
 
-import { CollectionModalProps, CustomFile } from './interface'
+import { validationSchema } from './utils'
+import { CollectionFormValues, CollectionModalProps, CustomFile } from './interface'
 
 import Typography from 'design-systems/Atoms/Typography'
 import Input from 'design-systems/Atoms/Input'
@@ -27,6 +29,8 @@ const ModalCollection: React.FC<CollectionModalProps> = ({ open, label, setIsMod
   }, [open])
 
   const handleClose = () => {
+    resetForm()
+    setFile(undefined)
     setIsModalOpen(false)
   }
 
@@ -38,17 +42,33 @@ const ModalCollection: React.FC<CollectionModalProps> = ({ open, label, setIsMod
 
       if (selectedFile) {
         const fileWithPreview = Object.assign(selectedFile, { preview: URL.createObjectURL(selectedFile) })
-
+        setFieldValue('file_upload', fileWithPreview?.preview)
         setFile(fileWithPreview)
       }
+    } else {
+      setFieldValue('file_upload', null)
     }
   }
+
+  const initialValues: CollectionFormValues = {
+    name: '',
+    description: '',
+    url: '',
+    symbol: '',
+    file_upload: '',
+  }
+
+  const { handleSubmit, handleChange, setFieldValue, handleBlur, values, errors, touched, resetForm } = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: values => {},
+  })
 
   const typographyClass = 'text-black font-Poppins text-md leading-[145%]'
 
   return (
     <>
-      <Modal open={isModalOpen} label={label} handleClose={handleClose}>
+      <Modal className="!max-h-[550px] overflow-y-scroll" handleClose={handleClose} label={label} open={isModalOpen}>
         <div className={`${className} w-full`}>
           <div className="flex gap-2 lmd:gap-1">
             <div className="w-[40%] smd:w-[45%]">
@@ -69,7 +89,15 @@ const ModalCollection: React.FC<CollectionModalProps> = ({ open, label, setIsMod
               </Typography>
               <div>
                 <label className="flex cursor-pointer">
-                  <input accept="image/*" className="hidden" id="file-upload" type="file" onChange={handleChangeFile} />
+                  <input
+                    accept="image/*"
+                    className="hidden"
+                    id="file_upload"
+                    name="file_upload"
+                    type="file"
+                    onBlur={handleBlur}
+                    onChange={handleChangeFile}
+                  />
                   <div className="custom-focus flex w-full items-center justify-center gap-4 rounded-sm border border-lightGray font-Poppins text-base font-semibold text-black hover:border-black focus:outline-none">
                     <Typography className={`${labelClass} py-[10px] smd:py-3`}>Choose File</Typography>
                   </div>
@@ -77,19 +105,70 @@ const ModalCollection: React.FC<CollectionModalProps> = ({ open, label, setIsMod
               </div>
             </div>
           </div>
-          <Typography className={`${typographyClass}  mb-[6px] mt-[10px] font-semibold`}>
-            Display name *<span className="text-lightGray">(cannot be changed in future)</span>
-          </Typography>
-          <Input variant="secondary" placeholder="Enter collection name" />
-          <Typography className={`${typographyClass} mb-[6px] mt-2  font-semibold`}>Symbol *</Typography>
-          <Input variant="secondary" placeholder="Enter collection name" />
+
+          {errors.file_upload && <span className="mt-1 text-sm font-medium text-[#E94949]">{errors.file_upload}</span>}
+          <div>
+            <Typography className={`${typographyClass}  mb-[6px] mt-[10px] font-semibold`}>
+              Display name *<span className="text-lightGray">(cannot be changed in future)</span>
+            </Typography>
+            <Input
+              error={errors.name}
+              id="name"
+              name="name"
+              placeholder="Enter collection name"
+              touched={touched.name}
+              value={values.name}
+              variant="secondary"
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Typography className={`${typographyClass} mb-[6px] mt-2  font-semibold`}>Symbol *</Typography>
+            <Input
+              error={errors.symbol}
+              id="symbol"
+              name="symbol"
+              placeholder="Enter token symbol"
+              touched={touched.symbol}
+              value={values.symbol}
+              variant="secondary"
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+          </div>
+
           <Typography className={`${typographyClass} mb-[6px] mt-2 font-semibold`}>Description *</Typography>
-          <TextAreaInput placeholder="Enter token symbol" className="h-[104px]" />
-          <Typography className={`${typographyClass} mb-[6px] mt-[10px] font-semibold`}>
-            Short URL * <span className="text-lightGray">(will be used as public URL)</span>
-          </Typography>
-          <Input variant="secondary" placeholder="modernmuseum.io/" />
-          <Button className="mb-[10px] mt-4" fullWidth={true}>
+          <TextAreaInput
+            className="h-[104px]"
+            error={errors.description}
+            id="description"
+            name="description"
+            placeholder="Enter token symbol"
+            touched={touched.description}
+            value={values.description}
+            onBlur={handleBlur}
+            onChange={handleChange}
+          />
+
+          <div>
+            <Typography className={`${typographyClass} mb-[6px] mt-[10px] font-semibold`}>
+              Short URL * <span className="text-lightGray">(will be used as public URL)</span>
+            </Typography>
+            <Input
+              error={errors.url}
+              id="url"
+              name="url"
+              placeholder="modernmuseum.io/"
+              touched={touched.url}
+              value={values.url}
+              variant="secondary"
+              onBlur={handleBlur}
+              onChange={handleChange}
+            />
+          </div>
+
+          <Button className="mb-[10px] mt-4" fullWidth={true} onClick={() => handleSubmit()}>
             Create collection
           </Button>
         </div>

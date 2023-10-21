@@ -17,6 +17,7 @@ export const ExploreChildrenData = [
   { url: 'https://www.youtube.com/', Icon: IconYoutube, target: '_blank' },
   { url: 'https://discord.com/', Icon: IconDiscord, target: '_blank' },
 ]
+export const ProfileChildrenData = [{ url: 'https://twitter.com/', Icon: IconTwitter, target: '_blank' }]
 export const CollectionIcon = [
   { url: 'https://twitter.com/', Icon: IconAttachment, target: '_blank' },
   { url: 'https://www.instagram.com/', Icon: IconEye, target: '_blank' },
@@ -43,9 +44,9 @@ export const COLLECTION_STATUS = [
   { name: 'On auction', id: 'On auction' },
 ]
 export const COLLECTION_QUANTITY = [
-  { name: 'All items', id: 'All items' },
-  { name: 'Single items', id: 'Single items' },
-  { name: 'Bundles', id: 'Bundles' },
+  { name: 'All items', id: 'All items', value: 'all' },
+  { name: 'Single items', id: 'Single items', value: 'single' },
+  { name: 'Bundles', id: 'Bundles', value: 'bundles' },
 ]
 export const COLLECTION_PROPERTIES = [
   { name: 'All items', id: 'All items' },

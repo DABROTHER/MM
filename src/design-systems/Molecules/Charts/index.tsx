@@ -17,6 +17,7 @@ const Charts: React.FC<ChartsProps> = ({
   width = '100%',
   border = 1,
   hAxisPosition,
+  lineColor = '#000',
 }) => {
   const diffdata = {
     old: data,
@@ -36,12 +37,15 @@ const Charts: React.FC<ChartsProps> = ({
       gridlines: {
         color: gridLinesColor,
       },
+      titleTextStyle: {
+        color: 'white',
+      },
     },
 
     legend: { position: 'none' },
     series: {
       0: { type: 'bars', color: '#DB417D' },
-      1: { type: 'line', color: '#000' },
+      1: { type: 'line', color: lineColor },
     },
     responsive: true,
     chartArea: {

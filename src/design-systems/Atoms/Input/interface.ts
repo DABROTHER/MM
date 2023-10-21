@@ -13,5 +13,7 @@ export type InputProps = Modify<
     className?: string
     variant?: InputVariant
     suffix?: boolean
+    error?: string
+    touched?: boolean
   }
 >

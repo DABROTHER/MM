@@ -2,16 +2,23 @@
 import type { NextPage } from 'next'
 import { useState } from 'react'
 
-import { NFTData } from './utils'
-
 import HomePageTemplate from 'design-systems/Templates/HomePageTemplate'
 import { useHome } from 'hooks/apis/useHome'
+import { MM_BLOCKCHAIN_NETWORK } from 'utils'
+import { useLaunchPadLike } from 'hooks'
+import { timeTab } from 'design-systems/Atoms/Tabs/utils'
+import { useConnector } from 'context/connector'
 
-const initialFilter = { time: '1', blockchainId: '64de1922637e465863bc6a2e', trending: 'true' }
+const initialFilter = {
+  time: timeTab?.[0].value,
+  blockChainId: MM_BLOCKCHAIN_NETWORK.ETHEREUM,
+  trending: true,
+  walletAddress: '',
+}
 
 const HomePage: NextPage = () => {
   const [query, setQuery] = useState<CollectionTableListQuery>(initialFilter)
-
+  const { isSigned, address } = useConnector()
   const {
     trending,
     spotLight,
@@ -23,23 +30,32 @@ const HomePage: NextPage = () => {
     launchpaditem,
     collectionTop,
     isLoadingSpotLight,
-  } = useHome(query)
+    refetchLaunchpaditem,
+  } = useHome({ ...query, walletAddress: address })
+  const { isLoadingLike, likeAsync } = useLaunchPadLike()
+
+  const likeHandler = async (launchPadId: string) => {
+    const isLike = await likeAsync({ launchPadId, walletAddress: address })
+    if (isLike?.success) refetchLaunchpaditem?.()
+  }
 
   return (
     <HomePageTemplate
-      NFT={NFTData}
-      collectionTable={collectionTable}
-      collectionTop={collectionTop}
+      collectionTable={collectionTable as collectionTableType[]}
+      collectionTop={collectionTop as collectionTableType[]}
       isLoadingCollection={isLoadingCollection}
       isLoadingCollectionTop={isLoadingCollectionTop}
       isLoadingLaunchpad={isLoadingLaunchpad}
+      isLoadingLike={isLoadingLike}
       isLoadingSpotLight={isLoadingSpotLight}
       isLoadingTrending={isLoadingTrending}
-      launchpad={launchpaditem}
+      isSigned={isSigned}
+      launchpad={launchpaditem as HomeLaunchpadList[]}
       query={query}
       setQuery={setQuery}
-      spotLight={spotLight}
-      trending={trending}
+      spotLight={spotLight as HomeSpotlightList[]}
+      trending={trending as HomeTrendingCategoryList[]}
+      onLike={likeHandler}
     />
   )
 }

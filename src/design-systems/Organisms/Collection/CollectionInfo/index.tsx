@@ -4,7 +4,7 @@ import { IconCheck } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import { formatAddress } from 'utils'
 
-const CollectionInfo: React.FC<CollectionInfoProps> = ({ data, description, name, creator }) => {
+const CollectionInfo: React.FC<CollectionInfoProps> = ({ data, description, name, creator, creatingSince }) => {
   return (
     <>
       <div className="mt-2 flex flex-col">
@@ -12,14 +12,15 @@ const CollectionInfo: React.FC<CollectionInfoProps> = ({ data, description, name
           {name}
           <IconCheck className="ml-3 inline-block" height={15} width={15} />
         </Typography>
-        <Typography className="leading-[20.3px ] text-start font-Poppins text-md font-semibold">
+        <Typography className="leading-[20.3px ] flex text-start font-Poppins text-md font-semibold">
           By <Typography className="ml-1 inline-block text-[#DB417D]">{formatAddress(creator)}</Typography>
+          {creatingSince}
         </Typography>
-        <Typography className="mt-[3px] w-full text-start font-Poppins text-md font-medium leading-[22.3px] lmd:w-[554px]">
+        <Typography className="mt-[6px] w-full text-start font-Poppins text-md font-medium leading-[20.3px] lmd:w-[554px]">
           {description}
         </Typography>
       </div>
-      <div className="mt-[2px] flex flex-row">
+      <div className="mt-[12px] flex flex-row">
         <div className="flex w-full flex-row items-end text-start xl:min-h-[37px]">
           {data.map((obj, i) => (
             <div className={`  grid grid-cols-3 gap-1 md:flex md:flex-row md:gap-4`} key={i}>

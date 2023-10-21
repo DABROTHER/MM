@@ -17,7 +17,7 @@ const meta: Meta<typeof ChooseWalletBlock> = {
 export default meta
 type Story = StoryObj<typeof ChooseWalletBlock>
 
-export const ChooseWallet: Story = () => <ChooseWalletBlock className="" />
+export const ChooseWallet: Story = () => <ChooseWalletBlock className="" isSigned={false} chainId={1} />
 ChooseWallet.args = {
   className: '',
 }

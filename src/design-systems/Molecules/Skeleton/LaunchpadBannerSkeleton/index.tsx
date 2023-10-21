@@ -5,14 +5,14 @@ import { LaunchpadBannerSkeletonProps } from './interface'
 
 import SkeletonLaunchpadBannerInfo from 'design-systems/Molecules/SkeletonCardInfo/SkeletonLaunchpadBannerCardInfo'
 
-const LaunchpadBannerSkeleton: React.FC<LaunchpadBannerSkeletonProps> = ({ className }) => {
+const LaunchpadBannerSkeleton: React.FC<LaunchpadBannerSkeletonProps> = ({ className, flexDirection = false }) => {
   return (
     <div className={`relative flex flex-col gap-4 md:flex-row ${className}`}>
       <CardSkeleton
-        children={<SkeletonLaunchpadBannerInfo className="absolute w-[90%]" />}
+        children={!flexDirection ? <SkeletonLaunchpadBannerInfo className="absolute w-[90%]" /> : ''}
         className=" relative h-[567px] w-full md:h-[400px] lmd:h-[560px]"
       />
-      <div className=" flex flex-row justify-between gap-4 md:flex-col">
+      <div className={`${'flex flex-row justify-between gap-4'} ${flexDirection ? ' md:flex-row' : 'md:flex-col'}`}>
         {Array(3)
           .fill('')
           .map((_, i) => (

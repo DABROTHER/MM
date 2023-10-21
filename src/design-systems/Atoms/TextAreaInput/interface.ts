@@ -6,5 +6,7 @@ export type TextAreaInputProps = Modify<
     label?: string
     value?: string
     className?: string
+    error?: string
+    touched?: boolean
   }
 >

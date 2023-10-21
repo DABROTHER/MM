@@ -15,7 +15,7 @@ import {
 } from 'design-systems/Atoms/Icons'
 import { useExplore } from 'hooks'
 
-const initialFilter = { categoryId: '', blockchainId: '', trending: '' }
+const initialFilter = { categoryId: '', blockChainId: '', trending: '' }
 
 const Footer: React.FC<FooterProps> = () => {
   const { exploreCategory } = useExplore(initialFilter)

@@ -14,10 +14,10 @@ const PriceCard: React.FC<PriceCardProps> = ({ className, onChangePrice }) => {
         ${convertCurrencyFormate(price[0])} - ${convertCurrencyFormate(price[1])} USD
       </Typography>
       <div className="mt-[3px] flex flex-row justify-between">
-        <Typography className="font-Poppins text-md font-medium leading-[23.5px] text-[#454545]">Min</Typography>
-        <Typography className="font-Poppins text-md font-medium leading-[23.5px] text-[#454545]">Max</Typography>
+        <Typography className="font-Poppins text-md font-medium leading-[23.5px] text-[#454545]">min.</Typography>
+        <Typography className="font-Poppins text-md font-medium leading-[23.5px] text-[#454545]">max.</Typography>
       </div>
-      <div className="mt-3 flex">
+      <div className="mt-3 flex" onClick={(e: any) => e.stopPropagation()}>
         <ReactSlider
           ariaLabel={['Lower thumb', 'Upper thumb']}
           ariaValuetext={state => `Thumb value ${state.valueNow}`}
@@ -32,7 +32,7 @@ const PriceCard: React.FC<PriceCardProps> = ({ className, onChangePrice }) => {
       </div>
       <Button
         className="mt-[19px] flex w-full bg-neutral-100 text-center font-Poppins text-base font-semibold leading-[23.2px] text-neutral-800"
-        onClick={() => onChangePrice(price)}
+        onClick={e => onChangePrice(price)}
       >
         Apply
       </Button>

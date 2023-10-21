@@ -6,14 +6,20 @@ import SpotLightCard from 'design-systems/Molecules/Cards/SpotLightCard'
 import DropDown from 'design-systems/Molecules/DropDown'
 import SpotlightSkeleton from 'design-systems/Molecules/Skeleton/SpotlightSkeleton'
 import DataNotFound from 'design-systems/Molecules/DataNotFound'
-import { PAGE_SIZE } from 'utils'
+import { PAGE_SIZE, formatLike } from 'utils'
 import { ScrollTrigger } from 'design-systems/Molecules/ScrollTrigger'
 import ExploreCategorySkeleton from 'design-systems/Molecules/Skeleton/ExploreCategorySkeleton'
+import Typography from 'design-systems/Atoms/Typography'
+import { IconHeart } from 'design-systems/Atoms/Icons'
+import TrendingInfo from 'design-systems/Molecules/CardsInfo/TrendingInfo'
 
-export const ExploreCardSkeltonList = () => {
+interface SkeletonExploreCardProps {
+  noOfSkeleton?: number
+}
+export const ExploreCardSkeltonList: React.FC<SkeletonExploreCardProps> = ({ noOfSkeleton }) => {
   return (
     <>
-      {Array(PAGE_SIZE)
+      {Array(noOfSkeleton ?? PAGE_SIZE)
         .fill('')
         .map((_: string, i: number) => (
           <SpotlightSkeleton className="card-shadow w-full md:h-[353px] xl:w-[332px]" key={i} />
@@ -44,8 +50,9 @@ const ExplorePageTemplate: React.FC<ExplorePageTemplateProps> = ({
             <DropDown
               className="z-20"
               data={exploreBlockChain}
-              defaultValue={{ name: 'Chains', id: '' }}
-              onChange={chain => onChangeFilter({ chainId: chain.id })}
+              defaultValue={exploreBlockChain[3]}
+              hoverDropdown={false}
+              onChange={chain => onChangeFilter({ blockChainId: chain.id })}
             />
           )}
         </div>
@@ -56,7 +63,7 @@ const ExplorePageTemplate: React.FC<ExplorePageTemplateProps> = ({
             <CategoryList
               categories={category}
               fill={true}
-              onClick={category => onChangeFilter({ category: category.id })}
+              onClick={category => onChangeFilter({ categoryId: category.id })}
             />
           )}
         </div>
@@ -68,6 +75,7 @@ const ExplorePageTemplate: React.FC<ExplorePageTemplateProps> = ({
               className="z-20"
               data={SORT_EXPLORE}
               defaultValue={{ name: 'Sort by', id: '' }}
+              hoverDropdown={false}
               onChange={trending => onChangeFilter({ trending: trending.id })}
             />
           )}
@@ -88,17 +96,37 @@ const ExplorePageTemplate: React.FC<ExplorePageTemplateProps> = ({
           </div>
         ) : exploreData ? (
           <div className="grid !gap-4 md:grid-cols-2 slg:grid-cols-3 xlg:grid-cols-4">
-            {exploreData.map(({ name, nfts }, i) => {
+            {exploreData.map(({ name, nfts, likeCount }, i) => {
               return (
                 <SpotLightCard
                   className="w-full"
-                  floor={'25'}
+                  collectionName={
+                    <Typography className="leading-4 custom-truncate-width truncate font-Poppins text-body font-bold text-neutral-100">
+                      {name}
+                    </Typography>
+                  }
                   key={i}
-                  likeNumber={1}
-                  name={name}
+                  likes={
+                    <Typography className="text-right font-Poppins text-md font-semibold leading-[145%] text-neutral-100">
+                      <IconHeart className="mr-3 inline-block" fill="red" height={14} width={16} />
+                      {formatLike(likeCount)}
+                    </Typography>
+                  }
                   nfts={nfts}
-                  sales={'2,500'}
-                  volume={'2500'}
+                  trendingInfo={
+                    <TrendingInfo
+                      className="items-end justify-end !px-0 !py-0"
+                      data={[
+                        {
+                          Floor: `${25} ETH`,
+                          Volume: `${2500 ?? 0} ETH`,
+                          Sales: '2,500' || '0',
+                        },
+                      ]}
+                      isInfoName={false}
+                      name={name}
+                    />
+                  }
                 />
               )
             })}

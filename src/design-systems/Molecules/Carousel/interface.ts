@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 
-export type SlideCount = 1 | 2 | 3 | 4
+export type SlideCount = 1 | 2 | 3 | 4 | 5
 
 export interface CarouselProps extends PropsWithChildren {
   className?: string

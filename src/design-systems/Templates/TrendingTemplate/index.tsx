@@ -17,6 +17,7 @@ import Card from 'design-systems/Molecules/Cards/Card'
 import seenIcon from 'assets/images/seenIcon.svg'
 import { ScrollTrigger } from 'design-systems/Molecules/ScrollTrigger'
 import TableSkelton from 'design-systems/Molecules/Skeleton/TableSkelton'
+import DataNotFound from 'design-systems/Molecules/DataNotFound'
 
 const TrendingTemplate: React.FC<TrendingPageTemplateProps> = ({
   exploreBlockChain,
@@ -165,7 +166,7 @@ const TrendingTemplate: React.FC<TrendingPageTemplateProps> = ({
               className="mt-[134px] w-[1136px] lmd:mt-[76px] xlg:w-full"
               isBorderBottom={true}
             />
-          ) : (
+          ) : users?.length ? (
             <Table
               className="trending-table mt-[134px] w-[1136px] lmd:mt-[76px] xlg:w-full"
               columns={[
@@ -182,6 +183,8 @@ const TrendingTemplate: React.FC<TrendingPageTemplateProps> = ({
               data={users}
               renderCell={renderCell}
             />
+          ) : (
+            <DataNotFound className="h-[321px] items-center !text-[37px]" size="h3" text="No Data Found" />
           )}
           {isFetchingNextTrending && (
             <TableSkelton DataItem={TrendingTableSkeltonActivityData} className="" isBorderBottom={true} />

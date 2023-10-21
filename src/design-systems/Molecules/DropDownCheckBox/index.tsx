@@ -15,7 +15,7 @@ const DropDownCheckBox: React.FC<DropDownProps> = ({
   hoverDropdown = true,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [value, setValue] = useState<ExploreBlock>(defaultValue)
+  const [value, setValue] = useState<string[]>([])
 
   const handleToggle = () => {
     if (!hoverDropdown) {
@@ -23,10 +23,22 @@ const DropDownCheckBox: React.FC<DropDownProps> = ({
     }
   }
 
+  const onSelect = (e: any, selectedValue: string, label: string) => {
+    e.stopPropagation()
+    onChange(selectedValue, label)
+    if (value.includes(selectedValue)) {
+      // Item is already selected, so uncheck it
+      setValue(prevValue => prevValue.filter(item => item !== selectedValue))
+    } else {
+      // Item is not selected, so check it
+      setValue(prevValue => [...prevValue, selectedValue])
+    }
+  }
+
   return (
     <div className="relative w-full">
       <div
-        className={`group absolute z-10 block h-fit w-full items-start rounded-sm border-[0.5px] border-lightGray bg-white px-4 py-3 hover:bg-neutral-800 ${className}`}
+        className={`group absolute z-10 block h-fit w-full cursor-pointer items-start rounded-sm border-[0.5px] border-lightGray bg-white px-4 py-3 hover:bg-neutral-800 ${className}`}
         onClick={handleToggle}
         onMouseEnter={hoverDropdown ? () => setIsOpen(true) : undefined}
         onMouseLeave={hoverDropdown ? () => setIsOpen(false) : undefined}
@@ -52,10 +64,10 @@ const DropDownCheckBox: React.FC<DropDownProps> = ({
                     hoverDropdown ? 'group-hover:pt-3 group-hover:ease-out' : 'pt-3'
                   }`}
                   key={i}
-                  onClick={() => onChange(drop.id, defaultValue.name)}
+                  onClick={e => onSelect(e, drop.id, defaultValue.name)}
                 >
                   <a className={`hoverAnimation text-start text-base font-semibold   text-neutral-100`}>{drop.name}</a>
-                  {isCheckBox && <input className="h-4 w-4" name={value.name} type="checkbox" />}
+                  {isCheckBox && <input checked={value.includes(drop.id)} className="h-4 w-4" type="checkbox" />}
                 </li>
               ))}
             </ul>

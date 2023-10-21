@@ -52,7 +52,7 @@ const ChooseBlockchain: React.FC = () => {
 
       <div className="flex justify-end pt-8">
         {selectedBlockchain ? (
-          <Link href="/create/stepTwo">
+          <Link href={`/create/start/${selectedBlockchain.toLowerCase()}`}>
             <Button
               className="ml-auto !gap-[76px] bg-cover bg-center px-[15px] py-[10.8px] md:!gap-3"
               disabled={!selectedBlockchain ? true : false}

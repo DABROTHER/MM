@@ -120,6 +120,11 @@ interface CollectionVolumePriceResponse {
   message: string
   success: boolean
 }
+interface CollectionCollectedTabResponse {
+  data: CollectionCollectedItem
+  message: string
+  success: boolean
+}
 interface VolumePriceData {
   Range: number[]
   data: PriceData[]
@@ -133,11 +138,9 @@ interface PriceData {
 interface CollectionDataOwnerResponse {
   success: boolean
   message: string
-  data: FormattedDistributionData
+  data: FormattedDistributionItem[]
 }
-interface FormattedDistributionData {
-  formattedDistribution: FormattedDistributionItem[]
-}
+
 interface FormattedDistributionItem {
   0: string
   1: string | number

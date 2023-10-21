@@ -9,4 +9,5 @@ export interface CollectionFilterProps {
   onSortByPrice: (data: ExploreBlock) => void
   totalCOunt: number
   onSearch: (searchValue: string) => void
+  onSelectDateTime: (startDate: string, endDate: string) => void
 }

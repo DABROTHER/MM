@@ -1,5 +1,5 @@
 export interface DropDownProps {
-  data: ExploreBlock[]
+  data?: ExploreBlock[]
   defaultValue: ExploreBlock
   onChange: (value: ExploreBlock) => void
   className?: string
@@ -7,4 +7,6 @@ export interface DropDownProps {
   isRatio?: boolean
   isCheckBox?: boolean
   children?: React.ReactNode
+  isSearch?: boolean
+  type?: string
 }

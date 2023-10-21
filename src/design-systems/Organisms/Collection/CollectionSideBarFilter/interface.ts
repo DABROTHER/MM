@@ -3,9 +3,11 @@ export interface CollectionSideBarFilterProps {
   category: ExploreBlock
   isLoadingExploreBlockChain: boolean
   exploreBlockChain: ExploreBlock[]
-  traits?: CollectionTraits
+  traits: CollectionTraits
   onChangePrice: (price: number[]) => void
   onCheckClick: (label: string, selectedValue: string) => void
+  onClickEvent: (selectedValue: string) => void
+  className?: string
 }
 
 export interface CollectionTraits {

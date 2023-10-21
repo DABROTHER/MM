@@ -16,5 +16,5 @@ const meta: Meta = {
 export default meta
 type Story = StoryObj<typeof SingleItemAccordion>
 
-export const DefaultAccordion: Story = () => <SingleItemAccordion />
+export const DefaultAccordion: Story = () => <SingleItemAccordion onSubmitHandler={()=>{}} />
 DefaultAccordion.args = {}

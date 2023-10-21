@@ -6,10 +6,10 @@ import IconButton from 'design-systems/Atoms/IconButton'
 import { IconEther } from 'design-systems/Atoms/Icons'
 import { launchpadNotification } from 'design-systems/Molecules/Cards/Card/utils'
 import CollectionBannerInfo from 'design-systems/Molecules/CardsInfo/CollectionBannerInfo'
-import { CollectionIcon, ExploreChildrenData } from 'design-systems/Templates/Collection/utils'
+import { CollectionIcon, ExploreChildrenData, ProfileChildrenData } from 'design-systems/Templates/Collection/utils'
 import Card from 'design-systems/Molecules/Cards/Card'
 
-const CollectionBanner: React.FC<CollectionBanner> = ({ bannerImage, logoImage, name }) => {
+const CollectionBanner: React.FC<CollectionBanner> = ({ bannerImage, logoImage, name, showBannerInfo = true }) => {
   return (
     <div className="relative mt-8 flex h-[280px] flex-col lmd:h-[384px]">
       <div className="relative h-[224px] w-full lmd:h-[304px]">
@@ -18,7 +18,7 @@ const CollectionBanner: React.FC<CollectionBanner> = ({ bannerImage, logoImage, 
           // eslint-disable-next-line react/no-children-prop
           children={
             <CollectionBannerInfo
-              ExploreChildrenData={ExploreChildrenData}
+              ExploreChildrenData={showBannerInfo ? ExploreChildrenData : ProfileChildrenData}
               className="!w-auto"
               iconClassName={`${LinkCommStyle} bg-neutral-700 border-0`}
               stroke="#9a9a9a"
@@ -27,13 +27,15 @@ const CollectionBanner: React.FC<CollectionBanner> = ({ bannerImage, logoImage, 
           className="group !h-full !w-full"
           fileClassName="!h-full !w-full opacity-100"
           notification={
-            <div className="flex flex-col">
-              <IconButton
-                // eslint-disable-next-line react/no-children-prop
-                children={<IconEther className="flex" fill="#9a9a9a" />}
-                className={`${launchpadNotification} !h-12 !w-12 bg-neutral-700`}
-              />
-            </div>
+            showBannerInfo && (
+              <div className="flex flex-col">
+                <IconButton
+                  // eslint-disable-next-line react/no-children-prop
+                  children={<IconEther className="flex" fill="#9a9a9a" />}
+                  className={`${launchpadNotification} !h-12 !w-12 bg-neutral-700`}
+                />
+              </div>
+            )
           }
           src={bannerImage}
           variant="all"
@@ -51,12 +53,14 @@ const CollectionBanner: React.FC<CollectionBanner> = ({ bannerImage, logoImage, 
             variant="all"
           />
         </div>
-        <CollectionBannerInfo
-          ExploreChildrenData={CollectionIcon}
-          className="hidden !w-auto lmd:flex"
-          iconClassName={`${LinkCommStyle}`}
-          stroke="black"
-        />
+        {showBannerInfo && (
+          <CollectionBannerInfo
+            ExploreChildrenData={CollectionIcon}
+            className="hidden !w-auto lmd:flex"
+            iconClassName={`${LinkCommStyle}`}
+            stroke="black"
+          />
+        )}
       </div>
     </div>
   )

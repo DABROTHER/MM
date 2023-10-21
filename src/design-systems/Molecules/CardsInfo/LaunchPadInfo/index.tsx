@@ -3,7 +3,15 @@ import { LaunchPadInfoProps } from './interface'
 import { IconCheck, IconLiked, IconLikeFill } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 
-const LaunchPadInfo: React.FC<LaunchPadInfoProps> = ({ type, className, name, isLiked, likeCount }) => {
+const LaunchPadInfo: React.FC<LaunchPadInfoProps> = ({
+  type,
+  className,
+  name,
+  isLiked,
+  likeCount,
+  onLike,
+  isLoadingLike,
+}) => {
   return (
     <div className={`flex h-full w-full flex-col overflow-hidden px-4 pb-4 pt-[19px] ${className}`}>
       <div className="flex w-full flex-row justify-between gap-[35px]">
@@ -15,9 +23,11 @@ const LaunchPadInfo: React.FC<LaunchPadInfoProps> = ({ type, className, name, is
         </div>
         <div className="flex flex-row items-center gap-3">
           {isLiked ? (
-            <IconLikeFill className="-mt-1 items-center" height={15} width={16} />
+            <IconLikeFill className={`cursor-default `} height={15} width={16} />
           ) : (
-            <IconLiked className="-mt-1 items-center" height={15} width={16} />
+            <div className={`${isLoadingLike && 'cursor-default'}`} onClick={onLike}>
+              <IconLiked height={15} width={16} />
+            </div>
           )}
           <Typography className="items-center font-Poppins text-md font-semibold leading-[109.5%] text-neutral-100">
             {likeCount}

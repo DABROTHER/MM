@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useExplore } from 'hooks'
 import { ExploreFilters } from 'interfaces'
 
-const initialFilter = { categoryId: '', blockchainId: '', trending: '' }
+const initialFilter = { categoryId: '', blockChainId: '', trending: '' }
 
 import CollectionsDetails from 'design-systems/Templates/CollectionsDetails'
 import { useBlockchain } from 'hooks/apis/useBlockchain'

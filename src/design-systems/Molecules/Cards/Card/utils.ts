@@ -1,10 +1,10 @@
 import { BorderRadiusVariant, BorderRadiusVariantSize, TransformVariant } from './interface'
 
-export const getBorderRadius = (variant: BorderRadiusVariant): string => {
+export const getBorderRadius = (variant: BorderRadiusVariant, size: BorderRadiusVariantSize = 'sm'): string => {
   const borderRadiusClasses: Record<BorderRadiusVariant, string> = {
-    all: 'rounded-sm',
-    top: 'rounded-tl-sm rounded-tr-sm',
-    bottom: 'rounded-bl-sm rounded-br-sm',
+    all: `rounded-${size}`,
+    top: `rounded-tl-${size} rounded-tr-${size}`,
+    bottom: `rounded-bl-${size} rounded-br-${size}`,
     none: 'rounded-none',
   }
 

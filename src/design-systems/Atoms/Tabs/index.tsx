@@ -8,7 +8,7 @@ import { DefaultTabProps } from './interface'
 import Typography from 'design-systems/Atoms/Typography'
 
 const Tab: React.FC<DefaultTabProps> = ({
-  tabs,
+  tabs = [],
   defaultTab,
   active,
   setActive,

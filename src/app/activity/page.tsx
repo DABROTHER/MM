@@ -6,7 +6,7 @@ import ActivityTemplate from 'design-systems/Templates/ActivityTemplate'
 import { useBlockchain } from 'hooks/apis/useBlockchain'
 import { ExploreFilters } from 'interfaces'
 
-const initialFilter = { categoryId: '', blockchainId: '', trending: '' }
+const initialFilter = { categoryId: '', blockChainId: '', trending: '' }
 
 const Activity: React.FC = () => {
   const { exploreBlockChain, isLoadingExploreBlockChain } = useBlockchain()

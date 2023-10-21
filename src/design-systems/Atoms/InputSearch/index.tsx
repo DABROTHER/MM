@@ -1,8 +1,10 @@
-import React from 'react'
-
+import React, { useRef, useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { SearchIcon } from '../Icons'
 
 import { InputSearchProps } from './interface'
+import { debounce } from 'utils'
+import { useSearchResource } from 'hooks'
 
 export const InputSearch: React.FC<InputSearchProps> = ({
   id = 'form-input',
@@ -16,6 +18,29 @@ export const InputSearch: React.FC<InputSearchProps> = ({
 
   ...props
 }) => {
+  const [searchquery, setSearchQuery] = useState<string>('')
+  const router = useRouter()
+
+  const debounceTimeout = useRef<ReturnType<typeof debounce> | null>(null)
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value
+
+    if (debounceTimeout.current) {
+      debounceTimeout.current.cancel()
+    }
+
+    debounceTimeout.current = debounce(value => {
+      setSearchQuery(value)
+
+      const url = `/resources/search?query=${value}`
+
+      router.push(url)
+    }, 3000)
+
+    debounceTimeout.current(searchValue)
+  }
+
   return (
     <div>
       <div className="w-full lg:w-full">
@@ -34,6 +59,7 @@ export const InputSearch: React.FC<InputSearchProps> = ({
               required={required}
               type={type}
               onBlur={onBlur}
+              onChange={handleSearch}
               {...props}
               autoComplete="off"
             />

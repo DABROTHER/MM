@@ -1,6 +1,6 @@
 export interface CommonInputProps {
   value?: string
-  onChange?: any
+  onChange: (e: string) => void
   placeholder: string
   className: string
 }

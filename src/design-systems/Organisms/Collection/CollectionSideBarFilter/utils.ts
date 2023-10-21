@@ -1,10 +1,10 @@
 export const COLLECTION_EVENT_TYPE = [
-  { name: 'All', id: 'All' },
-  { name: 'Listings', id: 'Listings' },
-  { name: 'Offers', id: 'Offers' },
-  { name: 'Sales', id: 'Sales' },
-  { name: 'Minted', id: 'Minted' },
-  { name: 'Transfers', id: 'Transfers' },
+  { name: 'All', id: 'all' },
+  { name: 'Listings', id: 'listing' },
+  { name: 'Offers', id: 'offer' },
+  { name: 'Sales', id: 'sale' },
+  { name: 'Minted', id: 'minted' },
+  { name: 'Transfers', id: 'transfer' },
 ]
 
 export const switchValueOfKey = (data: ExploreBlock[]) => {

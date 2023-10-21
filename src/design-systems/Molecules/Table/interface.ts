@@ -1,7 +1,7 @@
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 
 export type TableColumn = {
-  header: string
+  header: string | ReactNode
   accessor: string
   colSpan: number
 }
@@ -14,4 +14,5 @@ export type TableProps<T> = {
   headerCSS?: string
   isBorderBottom?: boolean
   onChangeRange?: (range: number) => void
+  colCSS?: string
 }

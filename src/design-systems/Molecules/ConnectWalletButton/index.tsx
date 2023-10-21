@@ -8,13 +8,16 @@ import { AccountIcon, WalletIcon } from 'design-systems/Atoms/Icons'
 import Typography from 'design-systems/Atoms/Typography'
 import dummyProfile from 'assets/images/dummyProfile.svg'
 
-const ConnectWalletButton: React.FC<propType> = ({ resConnectWallet }) => {
+const ConnectWalletButton: React.FC<propType> = ({ resConnectWallet, onClick }) => {
   const commText = ['pl-4 font-Poppins text-base font-semibold text-black'].join()
   const commSpan = ['my-auto h-12 border-r border-lightGray'].join()
 
   return (
     <>
-      <div className={`connect-wallet-btn inline-flex w-[354px] justify-end ${resConnectWallet && 'w-full px-2'}`}>
+      <div
+        className={`connect-wallet-btn inline-flex w-[354px] justify-end ${resConnectWallet && 'w-full px-2'}`}
+        onClick={onClick}
+      >
         <button
           className={`${
             resConnectWallet &&

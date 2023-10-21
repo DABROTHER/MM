@@ -24,7 +24,7 @@ const LaunchpadPage: NextPage = () => {
   return (
     <LaunchPageTemplate
       assets={assets}
-      defaultBannerSrc={bannerSrc ?? launchpadBannerData?.[0].collectionId}
+      defaultBannerSrc={bannerSrc ?? launchpadBannerData?.[0]?.collectionId}
       hasMoreAssets={Boolean(hasMoreAssets)}
       isFetchingMoreAssets={isFetchingNextAssets}
       isLoadingLaunchpad={isLoadingAssets}

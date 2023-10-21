@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
 import ReactSlider from 'react-slider'
 
 import { CollectionPageTemplateProps } from './interface'
@@ -21,14 +21,17 @@ import Typography from 'design-systems/Atoms/Typography'
 import { TableColumn } from 'design-systems/Molecules/Table/interface'
 import Card from 'design-systems/Molecules/Cards/Card'
 import Table from 'design-systems/Molecules/Table'
-import { IconAttachment, IconCheck, IconSale } from 'design-systems/Atoms/Icons'
+import { CloseIcon, IconAttachment, IconCheck, IconSale } from 'design-systems/Atoms/Icons'
 import CollectionDataTab from 'design-systems/Organisms/Collection/CollectionDataTab'
-import { convertTimeToAgo } from 'utils'
+import { CURRENT_TIME, convertTimeToAgo, getLastHourTime } from 'utils'
 import { ScrollTrigger } from 'design-systems/Molecules/ScrollTrigger'
 import TableSkelton from 'design-systems/Molecules/Skeleton/TableSkelton'
 import CollectionBannerSkeleton from 'design-systems/Molecules/Skeleton/CollectionSkeleton/CollectionBannerSkeleton'
 import CollectionInfoSkeleton from 'design-systems/Molecules/Skeleton/CollectionSkeleton/CollectionInfoSkeleton'
 import DataNotFound from 'design-systems/Molecules/DataNotFound'
+import { handleCollectionUI } from 'design-systems/Organisms/Collection/CollectionCardList/utils'
+import Button from 'design-systems/Atoms/Button'
+import { AnyFunction } from 'interfaces'
 
 const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
   isLoadingExploreBlockChain,
@@ -55,6 +58,8 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
   getPriceDistributionAsync,
   totalCOunt,
   onSearch,
+  onClickEvent,
+  onChangeCategory,
 }) => {
   const [showFilter, setShowFilter] = useState<boolean>(false)
   const [category, setCategory] = useState<ExploreBlock>(COLLECTION_CATEGORY[0])
@@ -82,7 +87,7 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
     form: ReactNode
     to: ReactNode
   }
-  //
+
   const Items: User[] = useMemo(
     () =>
       collectionData.map(({ bestOffer, fileUrl, lastSale, name, timeListed, usdAmount, tokenId }, i) => {
@@ -93,7 +98,7 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
               <Card
                 alt=""
                 borderSize="xs"
-                className={`flex h-12 w-12 text-start ${moff && range >= i + 1 && 'border-2 border-[#DB417D]'}`}
+                className={`flex h-12 w-12 text-start ${moff && range >= i + 1 && 'border border-lightGray'}`}
                 src={fileUrl}
                 variant="all"
               />
@@ -193,9 +198,10 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
       return {
         columns: ColumnsItem,
         data: Items,
-        headerCSS: 'collection-table-child',
+        headerCSS: 'collection-table-child last:!pr-0',
         isBorderBottom: true,
         renderCell: renderCell,
+        colCSS: 'last:!pr-0',
       }
     } else if (category.id === 'activity') {
       return {
@@ -208,38 +214,73 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
     }
   }, [Activity, Items, category.id])
 
+  async function fetchData(apiFunction: AnyFunction, params: any) {
+    try {
+      const response = await apiFunction(params)
+      return response.data // Assuming the response contains the data you need
+    } catch (error) {
+      console.error(`API call failed: ${error}`)
+      return null // Or handle the error as needed
+    }
+  }
+
+  const onSelectTime = useCallback(async (startDateTime?: string, endDateTime?: string) => {
+    Promise.all([
+      fetchData(getOwnersTop50Async, {
+        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc',
+        endTime: startDateTime ?? CURRENT_TIME.toISOString(),
+        startTime: endDateTime ?? endDateTime ?? getLastHourTime(new Date(CURRENT_TIME), Number(8760)),
+      }),
+      fetchData(getPriceVolumeAsync, {
+        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc3',
+        endDateTime: startDateTime ?? CURRENT_TIME.toISOString(),
+        startDateTime: endDateTime ?? getLastHourTime(new Date(CURRENT_TIME), Number(8760)),
+      }),
+      fetchData(getOwnerDistributionAsync, {
+        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc',
+        endTime: startDateTime ?? CURRENT_TIME.toISOString(),
+        startTime: endDateTime ?? endDateTime ?? getLastHourTime(new Date(CURRENT_TIME), Number(8760)),
+      }),
+      fetchData(getPriceDistributionAsync, {
+        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc',
+        endTime: startDateTime ?? CURRENT_TIME.toISOString(),
+        startTime: endDateTime ?? endDateTime ?? getLastHourTime(new Date(CURRENT_TIME), Number(8760)),
+      }),
+    ])
+      .then(([top50Owners, volumePrice, ownerDistribution, priceDistributionData]) => {
+        // Handle the results of each API call here
+        if (top50Owners) {
+          setTop50Owners(top50Owners)
+        }
+        if (volumePrice) {
+          setVolumePrice(volumePrice)
+        }
+        if (ownerDistribution) {
+          setOwnerDistribution(ownerDistribution)
+        }
+        if (priceDistributionData) {
+          setPriceDistributionData(priceDistributionData as CollectionPriceDistribution)
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the API calls
+        console.error(`One or more API calls failed: ${error}`)
+      })
+  }, [])
+
   const onSelectCategory = async (data: ExploreBlock) => {
     setCategory(data)
+    onChangeCategory()
     if (data.id !== 'data') {
       return onSetTab(data.id)
     }
-    try {
-      const { data } = await getOwnersTop50Async({ walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc' })
-      setTop50Owners(data)
-      const value = await getPriceVolumeAsync({
-        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc3',
-        startDateTime: '2023-07-01T12:09:48.005Z',
-        endDateTime: '2023-09-20T12:14:56.927Z',
-      })
-      setVolumePrice(value.data)
-      const ownerDistribution = await getOwnerDistributionAsync({
-        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc',
-      })
-      setOwnerDistribution(ownerDistribution?.data?.formattedDistribution)
-      const priceData = await getPriceDistributionAsync({
-        walletAddress: '0x3f2671157ca7a6eafcd36fbb7adee2b58678b4gc',
-        startTime: '2023-08-07T09:45:48.005Z',
-        endTime: '2023-08-11T09:45:56.927Z',
-      })
-      setPriceDistributionData(priceData?.data as CollectionPriceDistribution)
-    } catch (error) {}
+    onSelectTime()
   }
 
   const totalSweep = useMemo(
     () => collectionData.slice(0, range).reduce((accumulator, currentValue) => accumulator + currentValue.usdAmount, 0),
     [range, collectionData]
   )
-
   return (
     <div className="container mb-[72px]">
       {isLoadingCollectionDetail ? (
@@ -281,28 +322,34 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
         onDesign={type => setDesign(type as CollectionDesign)}
         onMoffClick={() => setMoff(pre => !pre)}
         onSearch={onSearch}
+        onSelectDateTime={onSelectTime}
         onSortByPrice={onSortByPrice}
       />
       <div className={`mt-[39px] flex flex-row gap-4`}>
-        <CollectionSideBarFilter
-          category={category}
-          exploreBlockChain={exploreBlockChain as ExploreBlock[]}
-          isLoadingExploreBlockChain={isLoadingExploreBlockChain}
-          isShow={showFilter}
-          traits={collectionDetail?.filter.traits}
-          onChangePrice={onChangePrice}
-          onCheckClick={onCheckClick}
-        />
+        {category.id !== 'data' && (
+          <CollectionSideBarFilter
+            category={category}
+            exploreBlockChain={exploreBlockChain as ExploreBlock[]}
+            isLoadingExploreBlockChain={isLoadingExploreBlockChain}
+            isShow={showFilter}
+            traits={collectionDetail?.filter.traits}
+            onChangePrice={onChangePrice}
+            onCheckClick={onCheckClick}
+            onClickEvent={onClickEvent}
+          />
+        )}
         {design === 'table' ? (
-          <div className="flex w-full flex-col">
+          <div className={`flex w-full flex-col ${handleCollectionUI(design, showFilter).className}`}>
             {(isLoadingCollection || isRefetching) && !isFetchingNextCollection ? (
               <TableSkelton
                 DataItem={category.id === 'item' ? CollectionTableSkeltonItemData : CollectionTableSkeltonActivityData}
+                // className="!w-full"
                 isBorderBottom={true}
               />
             ) : tableData?.data.length ? (
               <Table
-                className="w-[1188px] xl:w-full "
+                className={`w-[1188px] xl:w-full `}
+                colCSS={tableData?.colCSS}
                 columns={tableData?.columns as TableColumn[]}
                 data={tableData?.data as any[]}
                 headerCSS={tableData?.headerCSS}
@@ -311,11 +358,16 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
                 onChangeRange={e => setRange(e)}
               />
             ) : (
-              <DataNotFound className="h-[321px] items-center !text-[37px]" size="h3" text="No Data Found" />
+              <DataNotFound
+                className={`h-[321px] items-center !text-[37px] ${showFilter && 'w-[81%]'}`}
+                size="h3"
+                text="No Data Found"
+              />
             )}
             {isFetchingNextCollection && (
               <TableSkelton
                 DataItem={category.id === 'item' ? CollectionTableSkeltonItemData : CollectionTableSkeltonActivityData}
+                className="!w-[650px]"
                 isBorderBottom={true}
               />
             )}
@@ -352,26 +404,64 @@ const CollectionPageTemplate: React.FC<CollectionPageTemplateProps> = ({
           />
         )}
       </div>
-      {moff && (
-        <div className=" fixed bottom-0 z-[6999] flex h-20 w-full flex-row items-center gap-[885px] bg-neutral-800">
-          <div className="flex flex-row items-center gap-3">
-            <Typography className=" flex h-12 w-12  items-center justify-center rounded-sm border border-lightGray">
-              {range}
-            </Typography>
-            <ReactSlider
-              className="flex h-[2px] w-[230px] items-center justify-center bg-lightGray"
-              max={30}
-              thumbClassName="bg-neutral-100 border-[2px] border-neutral-100 h-3 w-1 rounded-full cursor-pointer"
-              onChange={value => setRange(value)}
-            />
+
+      {showFilter && (
+        <div
+          className="fixed left-0 top-0 z-[9999]  flex h-[100vh] w-auto animate-fade-in-up  flex-col overflow-y-auto overflow-x-hidden bg-white
+      p-8 xs:w-[321px]
+      sm:w-[390px] smd:w-[480px]
+      md:w-[650px] lmd:w-[768px]
+      slg:hidden slg:w-full"
+        >
+          <div className="flex w-full cursor-pointer justify-end text-right">
+            <p onClick={() => setShowFilter(false)}>
+              <CloseIcon />
+            </p>
           </div>
-          <div className="flex h-12 w-[200px] flex-row items-center justify-between rounded-sm border border-lightGray">
-            <Typography className="flex h-12 flex-row items-center border-r border-r-lightGray px-4 font-Poppins text-body font-medium">
-              Total: {totalSweep}
-            </Typography>
-            <Typography className="flex flex-row items-center px-4 font-Poppins text-body font-semibold">
-              Sweep
-            </Typography>
+          <CollectionSideBarFilter
+            category={category}
+            className="mt-8 !flex"
+            exploreBlockChain={exploreBlockChain as ExploreBlock[]}
+            isLoadingExploreBlockChain={isLoadingExploreBlockChain}
+            isShow={showFilter}
+            traits={collectionDetail?.filter.traits}
+            onChangePrice={onChangePrice}
+            onCheckClick={onCheckClick}
+            onClickEvent={onClickEvent}
+          />
+          <div className="mt-8 flex w-full flex-row gap-4">
+            <Button className="w-full border-0 bg-lightGray" onClick={onChangeCategory}>
+              Clear all
+            </Button>
+            <Button className="w-full border-0 bg-neutral-100 text-neutral-800" onClick={() => setShowFilter(false)}>
+              Done
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {moff && (
+        <div className="container fixed bottom-0 left-0 right-0 z-[6999] w-full">
+          <div className=" z-[6999] flex w-full flex-col items-center justify-between gap-4 bg-neutral-800 p-4 md:h-20 md:flex-row md:gap-0 md:p-0">
+            <div className="flex w-full flex-row items-center gap-3 md:w-auto">
+              <Typography className=" flex h-12 w-12  items-center justify-center rounded-sm border border-lightGray">
+                {range}
+              </Typography>
+              <ReactSlider
+                className="flex h-[2px] w-full items-center justify-center bg-lightGray md:w-[230px]"
+                max={30}
+                thumbClassName="bg-neutral-100 border-[2px] border-neutral-100 h-3 w-1 rounded-full cursor-pointer"
+                onChange={value => setRange(value)}
+              />
+            </div>
+            <div className="flex h-12 w-full flex-row items-center justify-center rounded-sm border border-lightGray md:w-[200px] md:justify-between">
+              <Typography className="flex h-12 flex-row items-center border-r border-r-lightGray px-4 font-Poppins text-body font-medium">
+                Total: {totalSweep}
+              </Typography>
+              <Typography className="flex flex-row items-center px-4 font-Poppins text-body font-semibold">
+                Sweep
+              </Typography>
+            </div>
           </div>
         </div>
       )}

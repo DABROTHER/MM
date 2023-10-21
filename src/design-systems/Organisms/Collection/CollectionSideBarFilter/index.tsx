@@ -1,7 +1,7 @@
 /* eslint-disable react/no-children-prop */
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { CollectionSideBarFilterProps } from './interface'
+import { CollectionSideBarFilterProps, CollectionTraits } from './interface'
 import { COLLECTION_EVENT_TYPE, convertIntoStringArrayToObject, switchValueOfKey } from './utils'
 
 import DropDown from 'design-systems/Molecules/DropDown'
@@ -10,6 +10,7 @@ import DropCard from 'design-systems/Molecules/DropmCard'
 import { COLLECTION_QUANTITY, COLLECTION_STATUS } from 'design-systems/Templates/Collection/utils'
 import ExploreCategorySkeleton from 'design-systems/Molecules/Skeleton/ExploreCategorySkeleton'
 import DropDownCheckBox from 'design-systems/Molecules/DropDownCheckBox'
+import DropDownSearchBarCheckBox from 'design-systems/Molecules/DropDownSearchBarCheckBox'
 
 const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
   isShow,
@@ -19,16 +20,37 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
   traits,
   onChangePrice,
   onCheckClick,
+  onClickEvent,
+  className,
 }) => {
+  const [properties, setProperties] = useState<CollectionTraits>({})
+  useMemo(() => {
+    setProperties(traits)
+  }, [traits])
+
+  const onSearchCategory = (search: string) => {
+    const matchingKeys = Object.keys(traits).filter(key => key.includes(search))
+
+    if (matchingKeys.length > 0) {
+      const filteredData: CollectionTraits = {}
+      for (const key of matchingKeys) {
+        filteredData[key] = traits[key]
+      }
+      setProperties(filteredData)
+    } else {
+      setProperties(traits) // No matching keys found
+    }
+  }
   return (
-    <div className={` ${isShow ? 'flex' : 'hidden'} flex w-[40%] flex-col gap-4 smd:w-[35%] md:w-[20%]`}>
+    <div className={` ${isShow ? 'flex' : 'hidden'} flex-col gap-[13px] slg:w-[19%] ${className}`}>
       {category.id === 'activity' ? (
-        <DropDown
-          className="relative"
+        <DropDownCheckBox
+          className="relative mt-3"
           data={COLLECTION_EVENT_TYPE}
           defaultValue={{ name: 'Event type', id: '' }}
-          isRatio={true}
-          onChange={() => {}}
+          hoverDropdown={false}
+          isCheckBox={true}
+          onChange={onClickEvent}
         />
       ) : (
         <>
@@ -36,6 +58,7 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
             className="relative"
             data={COLLECTION_STATUS}
             defaultValue={{ name: 'Status', id: '' }}
+            hoverDropdown={false}
             isRatio={true}
             onChange={() => {}}
           />
@@ -44,6 +67,7 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
             className="relative"
             data={COLLECTION_QUANTITY}
             defaultValue={{ name: 'Quantity', id: '' }}
+            hoverDropdown={false}
             isRatio={true}
             onChange={() => {}}
           />
@@ -55,7 +79,8 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
                 <DropDown
                   className="relative mt-3"
                   data={switchValueOfKey(exploreBlockChain && exploreBlockChain)}
-                  defaultValue={switchValueOfKey(exploreBlockChain)?.[0]}
+                  defaultValue={switchValueOfKey(exploreBlockChain)?.[3]}
+                  hoverDropdown={false}
                   isRatio={true}
                   onChange={() => {}}
                 />
@@ -66,35 +91,15 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
           />
         </>
       )}
-
-      {/* <DropDown
-        children={
-          <div className=" relative mt-[9px] flex h-12 w-full flex-col rounded-sm border border-lightGray bg-transparent px-2.5 focus-within:border-black hover:border-black">
-            <div className=" top-0 flex h-12 w-full flex-row items-center gap-2 rounded-lg border-none bg-none text-base outline-none transition duration-200 ease-in">
-              <SearchIcon />
-              <input
-                className="w-full font-Poppins text-[#454545]  outline-none placeholder:w-auto placeholder:text-md placeholder:font-normal placeholder:text-lightGray"
-                placeholder="Search by property"
-                type="text"
-              />
-            </div>
-          </div>
-        }
-        className="relative"
-        data={COLLECTION_PROPERTIES}
-        defaultValue={{ name: 'Properties', id: '' }}
-        isRatio={true}
-        onChange={() => {}}
-      /> */}
-
       <DropCard
-        children={Object.keys({ ...traits }).map((property, i) => {
-          const propertyData = convertIntoStringArrayToObject({ ...traits }[property])
+        children={Object.keys({ ...properties }).map((property, i) => {
+          const propertyData = convertIntoStringArrayToObject({ ...properties }[property])
           return (
-            <DropDownCheckBox
-              className="relative mt-3"
+            <DropDownSearchBarCheckBox
+              className="relative mt-2"
               data={propertyData}
               defaultValue={{ name: property, id: '' }}
+              hoverDropdown={false}
               isCheckBox={true}
               key={i}
               onChange={onCheckClick}
@@ -102,7 +107,9 @@ const CollectionSideBarFilter: React.FC<CollectionSideBarFilterProps> = ({
           )
         })}
         className="relative mt-1"
+        isSearch={true}
         title="Properties"
+        onSearchCategory={onSearchCategory}
       />
     </div>
   )

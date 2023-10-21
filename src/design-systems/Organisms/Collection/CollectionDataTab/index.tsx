@@ -10,6 +10,7 @@ import { TableColumn } from 'design-systems/Molecules/Table/interface'
 import Table from 'design-systems/Molecules/Table'
 import TableSkelton from 'design-systems/Molecules/Skeleton/TableSkelton'
 import ChartSkeleton from 'design-systems/Molecules/Skeleton/ChartSkeleton'
+import DataNotFound from 'design-systems/Molecules/DataNotFound'
 
 const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
   isLoadingOwnersTop50 = true,
@@ -58,7 +59,7 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
         </Typography>
         {isLoadingPriceVolume ? (
           <ChartSkeleton className="h-[208px]" isBordered={true} />
-        ) : (
+        ) : volumePrice?.data?.length > 1 ? (
           <div className="flex w-full flex-row ">
             <Charts
               chartPotions={{
@@ -75,6 +76,8 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
               vAxisTitle="Volume (ETH)"
             />
           </div>
+        ) : (
+          <DataNotFound className="h-[208px] items-center !text-[37px]" size="h3" text="No Data Found" />
         )}
       </div>
       <div className=" mt-7 flex w-full flex-col">
@@ -125,7 +128,7 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
         </div>
         {isLoadingPriceDistribution ? (
           <ChartSkeleton className="h-[208px]" isBordered={true} />
-        ) : (
+        ) : priceDistributionData?.offerData?.length > 1 ? (
           <div className="flex w-full flex-row ">
             <Charts
               chartPotions={{
@@ -143,6 +146,8 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
               vAxisTitle="Price (ETH)"
             />
           </div>
+        ) : (
+          <DataNotFound className="h-[208px] items-center !text-[37px]" size="h3" text="No Data Found" />
         )}
       </div>
       <div className="mt-[18px] flex w-full flex-col gap-4 slg:flex-row">
@@ -156,7 +161,7 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
           <div className="mt-8 flex flex-row px-4">
             {isLoadingOwnersTop50 ? (
               <TableSkelton DataItem={CollectionDataOwnersSkelton} className="w-[553px]" isBorderBottom={true} />
-            ) : (
+            ) : Owners?.length > 1 ? (
               <Table
                 className="w-full "
                 columns={[
@@ -169,6 +174,8 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
                 headerCSS="collection-data-table-child"
                 renderCell={activeRenderCell}
               />
+            ) : (
+              <DataNotFound className="h-[508px] items-center !text-[37px]" size="h3" text="No Data Found" />
             )}
           </div>
         </div>
@@ -184,7 +191,7 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
               isBorderedChild={true}
               noOfBar={8}
             />
-          ) : (
+          ) : ownerDistribution?.length > 1 ? (
             <div className="flex w-full flex-row ">
               <Charts
                 border={0}
@@ -201,6 +208,8 @@ const CollectionDataTab: React.FC<CollectionDataTabProps> = ({
                 height="470px"
               />
             </div>
+          ) : (
+            <DataNotFound className="h-[508px] items-center !text-[37px]" size="h3" text="No Data Found" />
           )}
         </div>
       </div>

@@ -7,9 +7,9 @@ import { CardPreviewProps } from './interface'
 
 import AuthorImage from 'assets/images/author.png'
 
-const CardPreview: React.FC<CardPreviewProps> = ({ isBanner, imgUrl }) => {
+const CardPreview: React.FC<CardPreviewProps> = ({ isBanner, imgUrl, id, name }) => {
   return (
-    <div className="flex h-[505px] max-h-[505px] w-full justify-center rounded-sm border border-solid border-lightGray lg:max-w-[380px]">
+    <div className="flex h-full max-h-[505px] w-full justify-center rounded-sm border border-solid border-lightGray sm:h-[505px] lg:max-w-[380px]">
       <div className="h-full w-full pl-[14px] pr-4 pt-3 sm:pt-[6px]">
         <div className="w-full pl-[1px] pr-[1px] xlg:pt-[9px]">
           <Image

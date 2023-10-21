@@ -1,18 +1,42 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { accordionData } from '../Resources/utils'
-
+import AuthorImage from 'assets/images/author.png'
 import { ArticleTemplateProps } from './interface'
 
-import AuthorImage from 'assets/images/author.png'
 import Typography from 'design-systems/Atoms/Typography'
 import { BackBtnIcon, GettingStartedIcon } from 'design-systems/Atoms/Icons'
 import ArticleAccordion from 'design-systems/Molecules/ArticleAccordion'
 import { ArticleAccordionProps } from 'design-systems/Molecules/ArticleAccordion/interface'
+import DataNotFound from 'design-systems/Molecules/DataNotFound'
+import { ArticlesData } from 'api-services/interfaces/resources'
+import ArticleSkeleton from 'design-systems/Molecules/Skeleton/ArticleSkeleton'
 
-const ArticleTemplate: React.FC<ArticleTemplateProps> = () => {
+interface SkeletonProps {
+  noOfSkeleton?: number
+}
+
+export const ArticleSkeletonList: React.FC<SkeletonProps> = ({ noOfSkeleton }) => {
+  return (
+    <>
+      {Array(noOfSkeleton ?? 5)
+        .fill('')
+        .map((_: string, i: number) => (
+          <ArticleSkeleton className="card-shadow w-full" key={i} />
+        ))}
+    </>
+  )
+}
+
+const ArticleTemplate: React.FC<ArticleTemplateProps> = ({
+  slug,
+  singleArticleItem,
+  isLoadingSingleArticle,
+  isLoadingRelatedArticle,
+  relatedArticle,
+}) => {
   const router = useRouter()
 
   return (
@@ -24,18 +48,27 @@ const ArticleTemplate: React.FC<ArticleTemplateProps> = () => {
         </div>
 
         <Typography className="mt-[19px] text-left text-[32px] font-semibold text-black smd:mt-[25px] smd:text-xl">
-          Article title
+          {/* Article title */}
+          {singleArticleItem[0]?.title ? singleArticleItem[0]?.title : 'test'}
         </Typography>
 
         {/* author container */}
         <div className="mt-[20px] flex justify-between smd:mt-[26px]">
           <div className="flex items-center justify-center gap-3">
             <div className="h-[72px] w-[72px]">
-              <Image src={AuthorImage} width={0} height={0} alt="author image" className="rounded-sm" />
+              <Image
+                src={singleArticleItem[0]?.authorImage ? singleArticleItem[0]?.authorImage : AuthorImage}
+                width={0}
+                height={0}
+                alt="author image"
+                className="h-[72px] w-[72px] rounded-sm object-cover"
+              />
             </div>
 
             <div className="flex flex-col items-start justify-start">
-              <Typography className="font-Poppins text-base font-semibold text-black">Author Name</Typography>
+              <Typography className="font-Poppins text-base font-semibold text-black">
+                {singleArticleItem[0]?.authorName ? singleArticleItem[0]?.authorName : 'Updated User'}
+              </Typography>
               <Typography className="font-Poppins text-md font-medium text-black">1 month ago</Typography>
             </div>
           </div>
@@ -117,15 +150,19 @@ const ArticleTemplate: React.FC<ArticleTemplateProps> = () => {
           </Typography>
 
           <div className="mt-[22px] smd:mt-[18px]">
-            {accordionData.map((data: ArticleAccordionProps, i) => (
-              <ArticleAccordion
-                icon={data.icon}
-                key={i}
-                article={data.article}
-                height={data.height}
-                width={data.width}
-              />
-            ))}
+            {isLoadingRelatedArticle ? (
+              <div>
+                <ArticleSkeletonList />
+              </div>
+            ) : relatedArticle?.length ? (
+              <>
+                {relatedArticle?.map((data: ArticlesData, i) => (
+                  <ArticleAccordion article={data.title} key={i} />
+                ))}
+              </>
+            ) : (
+              <DataNotFound className="h-[321px] items-center !text-[37px]" size="h3" text="No Data Found" />
+            )}
           </div>
         </div>
       </div>

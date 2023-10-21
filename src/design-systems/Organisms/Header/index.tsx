@@ -8,13 +8,16 @@ import SearchInput from 'design-systems/Atoms/SearchInput'
 import Cart from 'design-systems/Molecules/Cart'
 import ConnectWalletButton from 'design-systems/Molecules/ConnectWalletButton'
 import Link from 'design-systems/Atoms/Link'
+import ProfileDropdown from 'design-systems/Molecules/ProfileDropdown'
+import WalletConnectionModal from 'design-systems/Molecules/Modals/WalletConnectionModal'
 const Header: React.FC<DashboardHeaderProps> = () => {
   const pathname = usePathname()
 
   const [cartModalIsOpen, setcartModalIsOpen] = useState<boolean>(false)
   const [responsiveMenuIsOpen, setResponsiveMenuIsOpen] = useState<boolean>(false)
   const [responsiveSearchIsOpen, setResponsiveSearchIsOpen] = useState<boolean>(false)
-
+  const [responsiveProfileIsOpne, setResponsiveProfileIsOpne] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const resConnectWallet = true
 
   const spanTextClassName = ['font-semibold font-Poppins text-md text-lightGray hoverAnimation'].join(' ')
@@ -26,6 +29,11 @@ const Header: React.FC<DashboardHeaderProps> = () => {
     setcartModalIsOpen(!cartModalIsOpen)
   }
 
+  const handleCloseMenu = () => {
+    setResponsiveMenuIsOpen(!responsiveMenuIsOpen)
+    setResponsiveProfileIsOpne(false)
+  }
+
   return (
     <>
       <header className="sticky top-0 z-[6999] bg-[#fff] py-3">
@@ -34,7 +42,7 @@ const Header: React.FC<DashboardHeaderProps> = () => {
             <div className="flex w-8/12">
               <div className="flex items-center">
                 <div className="mr-3 flex cursor-pointer lg:hidden">
-                  <div onClick={() => setResponsiveMenuIsOpen(!responsiveMenuIsOpen)}>
+                  <div onClick={handleCloseMenu}>
                     <ResponsiveMenu />
                   </div>
                   {responsiveMenuIsOpen && (
@@ -50,12 +58,18 @@ const Header: React.FC<DashboardHeaderProps> = () => {
                           </li>
                         </Link>
                         <Link href="">
-                          <li className={commLiItem}>Profile</li>
+                          <li
+                            className={commLiItem}
+                            onClick={() => setResponsiveProfileIsOpne(!responsiveProfileIsOpne)}
+                          >
+                            Profile
+                          </li>
                         </Link>
                       </ul>
-                      <ConnectWalletButton resConnectWallet={resConnectWallet} />
+                      <ConnectWalletButton resConnectWallet={resConnectWallet} onClick={() => setIsOpen(true)} />
                     </div>
                   )}
+                  <ProfileDropdown responsiveProfileIsOpne={responsiveProfileIsOpne} />
                 </div>
                 <div className="items-left mr-[31px] flex gap-4 xl:mr-8">
                   <Link className="hidden smd:flex" href="/">
@@ -97,7 +111,7 @@ const Header: React.FC<DashboardHeaderProps> = () => {
             </div>
             <div className="width-auto flex w-4/12 items-center justify-end gap-3 p-0 pl-2 xlg:pl-10">
               <div className="hidden lg:flex">
-                <ConnectWalletButton />
+                <ConnectWalletButton onClick={() => setIsOpen(true)} />
               </div>
               <div
                 className="mobile-search-icon flex cursor-pointer rounded-sm border border-lightGray px-3 py-[11px] hover:border-black min-[900px]:block lg:hidden"
@@ -114,7 +128,7 @@ const Header: React.FC<DashboardHeaderProps> = () => {
             </div>
             {cartModalIsOpen && (
               <div
-                className={`fixed left-0 right-0 top-[60px] mx-auto flex w-[92.66%] flex-col rounded-[10px] border border-lightGray bg-white hover:border-black md:absolute md:left-auto md:w-[368px] xlg:shadow-lg xl:absolute xl:right-0 ${
+                className={`fixed left-0 right-0 top-[72px] mx-auto flex w-[92.66%] flex-col rounded-[10px] border border-lightGray bg-white hover:border-black md:absolute md:left-auto md:top-[60px] md:w-[368px] xlg:shadow-lg xl:absolute xl:right-0 ${
                   cartModalIsOpen ? 'animate-fade-in-left rounded-sm' : 'animate-fade-in-right'
                 }`}
               >
@@ -122,6 +136,7 @@ const Header: React.FC<DashboardHeaderProps> = () => {
               </div>
             )}
           </div>
+          <WalletConnectionModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
         </div>
       </header>
     </>
